@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manal Oraha | Digital Space</title>
+    <style>
+        /* Unique Neon & Glassmorphism Theme */
+        :root {
+            --primary-neon: #00f2ff;
+            --secondary-neon: #7000ff;
+            --bg-dark: #0a0b10;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-light: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 242, 255, 0.15) 0%, transparent 40%);
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* Floating Navigation */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 25px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* Hero Section */
+        #home h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            margin: 0;
+            background: linear-gradient(to right, var(--primary-neon), var(--secondary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        #home p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            text-align: center;
+            color: #aaa;
+        }
+
+        /* Artistic Image Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            height: 300px;
+            cursor: pointer; /* Change cursor to pointer indicating clickability */
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(40%);
+        }
+
+        .img-container:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        /* Neon Form */
+        form {
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+            color: white;
+            border-radius: 12px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--secondary-neon), var(--primary-neon));
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Cinematic Video Area */
+        .video-box {
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(112, 0, 255, 0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        /* ==========================================================================
+           Custom Lightbox Styles
+           ========================================================================== */
+        .lightbox {
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 5, 8, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-content-wrapper {
+            position: relative;
+            max-width: 85%;
+            max-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 75vh;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.15);
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.4s ease;
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        /* Lightbox UI Elements (Glassmorphic Controls) */
+        .lightbox-btn {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--text-light);
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            z-index: 2010;
+        }
+
+        .lightbox-btn:hover {
+            color: var(--primary-neon);
+            border-color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .lightbox-close {
+            top: 30px;
+            right: 30px;
+        }
+
+        .lightbox-prev {
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-next {
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-caption {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: #aaa;
+            text-align: center;
+            max-width: 80%;
+            font-weight: 300;
+        }
+
+        /* Prevent scrolling when lightbox is open */
+        body.lightbox-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#home">Intro</a>
+        <a href="#gallery">Vision</a>
+        <a href="#video">Motion</a>
+        <a href="#contact">Connect</a>
+    </nav>
+
+    <section id="home">
+        <h1>Manal Oraha</h1>
+        <p>A digital creative exploring the intersection of code, design, and future technology.</p>
+    </section>
+
+    <section id="gallery">
+        <h2>Visual Vision</h2>
+        <div class="gallery">
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=600" alt="Abstract Art">
+            </div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=600" alt="Code Concept">
+            </div>
+            <div class="img-container">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600" alt="Cyber Tech">
+            </div>
+        </div>
+    </section>
+
+    <section id="video">
+        <h2>Motion Concept</h2>
+        <div class="video-box">
+            <div style="aspect-ratio: 16/9; width: 100%;">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://www.youtube.com/embed/hVvEISFw9w0?autoplay=1&mute=1&loop=1&playlist=hVvEISFw9w0" 
+                    title="Atmospheric Video" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Start a Conversation</h2>
+        <form action="#">
+            <input type="text" placeholder="Your Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <textarea rows="4" placeholder="Your Message..."></textarea>
+            <button type="submit">Send Transmission</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>Designed by Manal Oraha &copy; 2026 | Built for the Future</p>
+    </footer>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog">
+        <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Close Lightbox">&times;</button>
+        <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous Image">&#10094;</button>
+        
+        <div class="lightbox-content-wrapper">
+            <img src="" alt="" class="lightbox-img" id="lightboxImg">
+        </div>
+        
+        <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next Image">&#10095;</button>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryImages = document.querySelectorAll('.gallery .img-container img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            const closeBtn = document.getElementById('lightboxClose');
+            const prevBtn = document.getElementById('lightboxPrev');
+            const nextBtn = document.getElementById('lightboxNext');
+            
+            let currentIndex = 0;
+
+            // Open Lightbox
+            const openLightbox = (index) => {
+                currentIndex = index;
+                updateLightboxContent();
+                lightbox.classList.add('active');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('lightbox-open');
+            };
+
+            // Close Lightbox
+            const closeLightbox = () => {
+                lightbox.classList.remove('active');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('lightbox-open');
+            };
+
+            // Update Image and Caption Content
+            const updateLightboxContent = () => {
+                const activeImg = galleryImages[currentIndex];
+                lightboxImg.src = activeImg.src;
+                lightboxImg.alt = activeImg.alt;
+                lightboxCaption.textContent = activeImg.alt || `Image ${currentIndex + 1}`;
+            };
+
+            // Slide Control: Next
+            const showNext = (e) => {
+                if (e) e.stopPropagation();
+                currentIndex = (currentIndex + 1) % galleryImages.length;
+                updateLightboxContent();
+            };
+
+            // Slide Control: Previous
+            const showPrev = (e) => {
+                if (e) e.stopPropagation();
+                currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+                updateLightboxContent();
+            };
+
+            // Event Listeners for Gallery Grid items
+            galleryImages.forEach((img, index) => {
+                img.closest('.img-container').addEventListener('click', () => {
+                    openLightbox(index);
+                });
+            });
+
+            // Action Buttons UI Listeners
+            closeBtn.addEventListener('click', closeLightbox);
+            nextBtn.addEventListener('click', showNext);
+            prevBtn.addEventListener('click', showPrev);
+
+            // Dismiss modal when clicking on the dark space background
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+                    closeLightbox();
+                }
+            });
+
+            // Keyboard navigation controls
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('active')) return;
+                
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    showNext();
+                } else if (e.key === 'ArrowLeft') {
+                    showPrev();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
